@@ -14,8 +14,8 @@ class Net_ae(object):
         """
         self.v = v
         self.dims_encoder = dims_encoder
-        self.dims_decoder = [i for i in reversed(dims_encoder)]
-        self.num_layers = len(self.dims_encoder)
+        self.dims_decoder = [i for i in reversed(dims_encoder)]   ##解码器要与编码器的层数一样，并且每层的操作相对应
+        self.num_layers = len(self.dims_encoder)  ##编码器层总数
         self.para_lambda = para_lambda
         self.activation = activation
         self.reg = reg
@@ -61,7 +61,7 @@ class Net_ae(object):
         if self.activation == 'tanh':
             layer = tf.nn.tanh(layer)
         if self.activation == 'relu':
-            layer = tf.nn.relu(layer)
+            layer = tf.nn.relu(layer)  ##线性+非线性 一个全连接层
         for i in range(2, self.num_layers):
             layer = tf.add(tf.matmul(layer, weights['enc' + str(self.v) + '_w' + str(i)]),
                            weights['enc' + str(self.v) + '_b' + str(i)])
@@ -71,8 +71,8 @@ class Net_ae(object):
             if self.activation == 'tanh':
                 layer = tf.nn.tanh(layer)
             if self.activation == 'relu':
-                layer = tf.nn.relu(layer)
-        return layer
+                layer = tf.nn.relu(layer)  ##从第2层开始做线性+非线性，直到编码器的最后一层
+        return layer   ## 输出编码器最终结果
 
     def decoder(self, z_half, weights):
         """
