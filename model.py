@@ -41,7 +41,7 @@ def model(X1, X2, gt, para_lambda, dims, act, lr, epochs, batch_size):
         h_input = tf.Variable(xavier_init(batch_size, dims[2][0]), name='LatentSpaceData')
         h_list = tf.trainable_variables()
     fea1_latent = tf.placeholder(np.float32, [None, dims[0][-1]])
-    fea2_latent = tf.placeholder(np.float32, [None, dims[1][-1]])
+    fea2_latent = tf.placeholder(np.float32, [None, dims[1][-1]])  ##只是占位符，还没有喂数据，106行喂数据是把自动编码器生成的中间向量喂进去
 
     loss_pre = net_ae1.loss_reconstruct(x1_input) + net_ae2.loss_reconstruct(x2_input)
     pre_train = tf.train.AdamOptimizer(lr[0]).minimize(loss_pre)
@@ -52,7 +52,7 @@ def model(X1, X2, gt, para_lambda, dims, act, lr, epochs, batch_size):
     z_half2 = net_ae2.get_z_half(x2_input)
 
     loss_dg = para_lambda * (
-                net_dg1.loss_degradation(h_input, fea1_latent) + net_dg2.loss_degradation(h_input, fea2_latent))
+                net_dg1.loss_degradation(h_input, fea1_latent) + net_dg2.loss_degradation(h_input, fea2_latent))  ## 两个view经过autoencoder得到的中间量，但是这个H是初始化的
     update_dg = tf.train.AdamOptimizer(lr[2]).minimize(loss_dg, var_list=net_dg1.netpara.extend(net_dg2.netpara))
 
     update_h = tf.train.AdamOptimizer(lr[3]).minimize(loss_dg, var_list=h_list)
