@@ -33,7 +33,7 @@ def model(X1, X2, gt, para_lambda, dims, act, lr, epochs, batch_size):
     net_dg1 = Net_dg(1, dims[2], act[2])
     net_dg2 = Net_dg(2, dims[3], act[3])
 
-    H = np.random.uniform(0, 1, [X1.shape[0], dims[2][0]])
+    H = np.random.uniform(0, 1, [X1.shape[0], dims[2][0]])    ## 公共空间，矩阵，初始化
     x1_input = tf.placeholder(np.float32, [None, dims[0][0]])
     x2_input = tf.placeholder(np.float32, [None, dims[1][0]])
 
