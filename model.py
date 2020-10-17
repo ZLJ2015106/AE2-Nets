@@ -96,14 +96,14 @@ def model(X1, X2, gt, para_lambda, dims, act, lr, epochs, batch_size):
             batch_z_half1 = sess.run(z_half1, feed_dict={x1_input: batch_x1})
             batch_z_half2 = sess.run(z_half2, feed_dict={x2_input: batch_x2})
 
-            sess.run(tf.assign(h_input, batch_h))
+            sess.run(tf.assign(h_input, batch_h))  ## 将batch_h 值赋给 h_input
             # ADM-step2: optimize dg nets
             _, val_dg = sess.run([update_dg, loss_dg], feed_dict={fea1_latent: batch_z_half1,
                                                                   fea2_latent: batch_z_half2})
 
             # ADM-step3: update H
             for k in range(epochs[2]):
-                sess.run(update_h, feed_dict={fea1_latent: batch_z_half1, fea2_latent: batch_z_half2})
+                sess.run(update_h, feed_dict={fea1_latent: batch_z_half1, fea2_latent: batch_z_half2})   
 
             batch_h_new = sess.run(h_input)
             H[start_idx: end_idx, ...] = batch_h_new
